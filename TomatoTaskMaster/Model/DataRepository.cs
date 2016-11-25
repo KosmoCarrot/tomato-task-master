@@ -31,9 +31,19 @@ namespace TomatoTaskMaster.Model
 
         private Dictionary<string, ObservableCollection<Task>> LoadTasks()
         {
+            string content;
+
+            using (var fileReader = File.Open("calendar.json", FileMode.OpenOrCreate))
+            {
+                using (var streamReader = new StreamReader(fileReader))
+                {
+                    content = streamReader.ReadToEnd();
+                }
+            }
+                
             return JsonConvert
                 .DeserializeObject<Dictionary<string, ObservableCollection<Task>>>(
-                    File.ReadAllText("calendar.json")
+                 content
                 );
         }   
     }
