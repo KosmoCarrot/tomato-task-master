@@ -1,0 +1,126 @@
+﻿<Controls:MetroWindow x:Class="TomatoTaskMaster.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:viewModel="clr-namespace:TomatoTaskMaster.ViewModel"
+        xmlns:model="clr-namespace:TomatoTaskMaster.Model"
+        Title="Tomato Taskmaster" Height="400" Width="700"
+        BorderThickness="0" 
+        GlowBrush="Black"
+        ResizeMode="NoResize"
+        WindowTransitionsEnabled="False"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding MainWindowClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout x:Name="yourMahAppFlyout" Header="{Binding SelectedTask.Name}" 
+                             Position="Right" Width="200" IsOpen="{Binding IsOpenFlyOut}" Theme="Adapt">
+                <TextBox FontSize="16" Text="{Binding SelectedTask.Description}" BorderThickness="0"
+                         AcceptsReturn="True" TextWrapping="Wrap"/>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ListBoxItemDictionary.xaml"/>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="107*"/>
+            <RowDefinition Height="78*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="235*"/>
+            <ColumnDefinition Width="357*"/>
+        </Grid.ColumnDefinitions>
+        <Calendar VerticalAlignment="Top" Height="182" SelectedDate="{Binding Date, Mode=TwoWay}" 
+                  Margin="0,10,0,0"/>
+        <Button Style="{StaticResource AccentedSquareButtonStyle}" Grid.Row="1" 
+                Content="Add Task" VerticalAlignment="Top" HorizontalAlignment="Center"
+                Height="45" Width="120" IsDefault="True"
+                Command="{Binding AddTaskCommand}"/>
+        <StackPanel Grid.Column="1" Grid.RowSpan="2">
+            <Expander Header="New Tasks" Margin="0,15,30,0" IsExpanded="True" MaxHeight="200">
+                <ListBox Name="lstNewTasks" Margin="5" ItemsSource="{Binding Tasks}" 
+                         ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                         SelectedItem="{Binding SelectedTask, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:Task}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="280" Background="Transparent"
+                                         BorderThickness="0" HorizontalAlignment="Left" Controls:TextBoxHelper.ClearTextButton="True"/>
+                                <Button Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}"
+                                        ToolTip="Start doing this task with tomato!"
+                                        Command="{Binding DataContext.OpenTomatoCommand,
+                                        RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                    <Rectangle Width="10" Height="10">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Visual="{StaticResource appbar_timer}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Button>
+                                <Button Grid.Column="2" Style="{DynamicResource MetroCircleButtonStyle}"
+                                        ToolTip="Delete task"
+                                        Command="{Binding DataContext.DeleteTaskCommand,
+                                        RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                    <Rectangle Width="10" Height="10">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Visual="{StaticResource appbar_delete}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Button>
+                                <Button Grid.Column="3" Style="{DynamicResource MetroCircleButtonStyle}"
+                                        ToolTip="Read task description"
+                                        Command="{Binding DataContext.ShowTaskInfoCommand,
+                                        RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                    <Rectangle Width="10" Height="10">
+                                        <Rectangle.Fill>
+                                            <VisualBrush Visual="{StaticResource appbar_information}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+            <Expander Header="Completed for today" VerticalAlignment="Top" Margin="0,15,30,0" 
+                      IsExpanded="{Binding IsCompletedTasksListOpen}" MaxHeight="150">
+                <ListBox Name="lstCompletedTasks" Margin="5" ItemsSource="{Binding CompletedTasks}" 
+                         ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                         SelectedItem="{Binding SelectedTask, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type model:Task}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200*"/>
+                                    <ColumnDefinition Width="20*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding Name}" Width="280" Background="Transparent"
+                                         BorderThickness="0" HorizontalAlignment="Left" IsReadOnly="True"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Expander>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>

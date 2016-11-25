@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:local="clr-namespace:TomatoTaskMaster" StartupUri="View/MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+  <Application.Resources>
+    <ResourceDictionary>
+      <vm:ViewModelLocator p7:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:TomatoTaskMaster.ViewModel" xmlns:p7="http://schemas.microsoft.com/winfx/2006/xaml" />
+      <ResourceDictionary.MergedDictionaries>
+             <!-- MahApps.Metro resource dictionaries.-->
+             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+             <!-- Accent and AppTheme setting -->
+             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+             <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>
